@@ -1,0 +1,50 @@
+- include_tasks: install_dependencies.yaml
+
+- name: Create frontend service user group
+  become: true
+  ansible.builtin.group:
+    name: "{{ frontend_user_group }}"
+    state: present 
+
+- name: Create frontend service user
+  become: true
+  ansible.builtin.user:
+    name: "{{ frontend_user }}"
+    group: "{{ frontend_user_group }}"
+    create_home: no
+    shell: /sbin/nologin
+    state: present 
+
+- name: Crete frontend directory
+  become: true
+  ansible.builtin.file:
+    path: /var/www-data
+    state: directory
+    owner: "{{ frontend_user }}"
+    group: "{{ frontend_user_group }}"
+    mode: 0755
+
+- name: Download frontend artifact
+  ansible.builtin.get_url:
+    url: "{{ nexus_frontend_url }}{{ frontend_version }}/sausage-store-{{ frontend_version }}.tar.gz"
+    dest: "/tmp/sausage-store.tar.gz"
+    username: "{{ nexus_repo_user }}"
+    password: "{{ nexus_repo_pass }}"
+
+- name: Extract tar.gz archive
+  become: true
+  ansible.builtin.unarchive:
+    src: "/tmp/sausage-store.tar.gz"
+    dest: "{{ frontend_path }}"
+    owner: "{{ frontend_user }}"
+    group: "{{ frontend_user_group }}"
+    remote_src: yes
+
+- name: Copy systemd service
+  become: true
+  ansible.builtin.template:
+    src: frontend.service.j2
+    dest: /etc/systemd/system/frontend.service
+  notify:
+    - Reload frontend
+    - Restart frontend

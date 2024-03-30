@@ -1,0 +1,12 @@
+- name: Reload frontend
+  become: true
+  ansible.builtin.service:
+    name: frontend
+    daemon_reload: true
+    enabled: true
+
+- name: Restart frontend
+  become: true
+  ansible.builtin.service:
+    name: frontend
+    state: restarted

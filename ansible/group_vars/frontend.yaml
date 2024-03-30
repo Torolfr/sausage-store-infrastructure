@@ -1,0 +1,6 @@
+nodejs_version: 16
+frontend_version: 1.0.958194
+frontend_user: www-data
+frontend_user_group: www-data
+frontend_path: /var/www-data
+nexus_frontend_url: "{{ nexus_repo_url }}sausage-store-std-024-29-frontend/"

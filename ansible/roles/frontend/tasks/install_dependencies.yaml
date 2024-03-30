@@ -1,0 +1,24 @@
+- name: Install the gpg key for nodejs LTS
+  become: true
+  ansible.builtin.apt_key:
+    url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+    state: present
+
+- name: Install the nodejs LTS repos
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb https://deb.nodesource.com/node_{{ nodejs_version }}.x {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: yes
+
+- name: Install the nodejs
+  become: true
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+
+- name: Install http-server
+  become: true
+  community.general.npm:
+    name: http-server
+    global: yes

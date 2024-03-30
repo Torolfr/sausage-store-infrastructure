@@ -1,0 +1,38 @@
+- name: Wait for Connection
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Wait for Connection
+      ansible.builtin.wait_for_connection:
+        timeout: 120
+  tags:
+    - connection
+
+- name: All hosts update cache
+  hosts: all
+  gather_facts: true
+  ignore_unreachable: true
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 604800
+      become: true
+  tags:
+    - update
+
+- name: Deploy backend
+  hosts: backend
+  gather_facts: false
+  roles:
+    - backend
+  tags:
+    - backend
+
+- name: Deploy frontend
+  hosts: frontend
+  gather_facts: false
+  roles:
+    - frontend
+  tags:
+    - frontend
