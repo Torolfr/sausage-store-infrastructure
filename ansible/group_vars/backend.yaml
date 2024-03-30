@@ -1,0 +1,9 @@
+java_apt_package: openjdk-17-jdk
+backend_user: jarservice
+backend_user_group: jarservice
+backend_report_path: /opt/sausage-store/reports
+backend_logs_path: /var/sausage-store/logs
+backend_version: 1.0.960965
+backend_path: /opt/sausage-store/bin
+backend_jar_path: "{{ backend_path }}/sausage-store.jar"
+nexus_backend_url: "{{ nexus_repo_url }}sausage-store-std-024-29-backend/"

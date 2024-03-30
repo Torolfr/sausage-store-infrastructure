@@ -1,0 +1,67 @@
+- name: Install Java and python3-lxml
+  become: true
+  ansible.builtin.apt:
+    name:
+      - "{{ java_apt_package }}"
+      - python3-lxml
+    state: present
+
+- name: Create backend service user group
+  become: true
+  ansible.builtin.group:
+    name: "{{ backend_user_group }}"
+    state: present  
+
+- name: Create backend service user
+  become: true
+  ansible.builtin.user:
+    name: "{{ backend_user }}"
+    group: "{{ backend_user_group }}"
+    create_home: no
+    shell: /sbin/nologin
+    state: present
+
+- name: Create report directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ backend_report_path }}"
+    state: directory
+    owner: "{{ backend_user }}"
+    group: "{{ backend_user_group }}"
+
+- name: Create logs directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ backend_logs_path }}"
+    state: directory
+    owner: "{{ backend_user }}"
+    group: "{{ backend_user_group }}"
+
+- name: Crete backend directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ backend_path }}"
+    state: directory
+    owner: "{{ backend_user }}"
+    group: "{{ backend_user }}"
+
+- name: Download backend artifact
+  become: true
+  community.general.maven_artifact:
+    repository_url: "{{ nexus_backend_url }}"
+    dest: "{{ backend_jar_path }}"
+    group_id: "com.yandex.practicum.devops"
+    artifact_id: "sausage-store"
+    version: "{{ backend_version }}"
+    owner: "{{ backend_user }}"
+    username: "{{ nexus_repo_user }}"
+    password: "{{ nexus_repo_pass }}"
+
+- name: Copy systemd service
+  become: true
+  ansible.builtin.template:
+    src: backend.service.j2
+    dest: /etc/systemd/system/backend.service
+  notify:
+    - Reload backend
+    - Restart backend

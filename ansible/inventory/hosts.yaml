@@ -1,0 +1,8 @@
+all:
+  children:
+    backend:
+      hosts:
+        vm-sausage-store-std-024-29.praktikum-services.tech:
+    frontend:
+      hosts:
+        vm-sausage-store-std-024-29.praktikum-services.tech:

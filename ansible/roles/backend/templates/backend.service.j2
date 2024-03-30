@@ -1,0 +1,21 @@
+[Unit]
+Description=Backend Service for sausage-store
+After=network.target
+
+[Service]
+User={{ backend_user }}
+Group={{ backend_user_group }}
+Environment=REPORT_PATH={{ backend_report_path }}
+Environment=LOG_PATH={{ backend_logs_path }}
+Restart=always
+ExecStart=/usr/bin/java \
+-Dmyserver.basePath='/opt/sausage-store/bin/' \
+-Dmyserver.bindAddr='127.0.0.1' \
+-Dmyserver.bindPort='{{ backend_server_port }}' \
+-Dmyserver.hostName='Sausage-store' \
+-jar '{{ backend_jar_path }}'
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
+
