@@ -8,7 +8,8 @@ deploy:
     name: kubernetes
     url: ${K8S_URL}
   before_script:
-    - mkdir -p ~/.kube
+    - mkdir ~/.kube
+    - touch ~/.kube/config
     - echo ${KUBECONFIG} > ~/.kube/config
     - export KUBECONFIG=$(find ~/.kube -maxdepth 1 -type f -name '*' | tr "\n" ":")
   script:
