@@ -10,8 +10,8 @@ deploy:
   before_script:
     - mkdir ~/.kube
     - touch ~/.kube/config
-    - echo ${KUBECONFIG}
     - echo ${KUBECONFIG} > ~/.kube/config
+    - cat ~/.kube/config
     - export KUBECONFIG=$(find ~/.kube -maxdepth 1 -type f -name '*' | tr "\n" ":")
   script:
     - cat $KUBECONFIG
