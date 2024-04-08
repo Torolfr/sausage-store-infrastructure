@@ -10,8 +10,8 @@ deploy:
   before_script:
     - mkdir ~/.kube
     - echo ${KUBECONFIG} > ~/.kube/config
-    - cat ~/.kube/config
     - export KUBECONFIG=~/.kube/config
+    - cat $KUBECONFIG
   script:
     - kubectl apply -f kubernetes/backend/
     - kubectl apply -f kubernetes/backend-report/
