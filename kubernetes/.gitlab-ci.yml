@@ -8,6 +8,9 @@ deploy:
     name: kubernetes
     url: ${K8S_URL}
   before_script:
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+    - cp kubectl /usr/local/bin/
+    - chmod +x /usr/local/bin/kubectl
     - mkdir ~/.kube
     - echo ${KUBECONFIG} > ~/.kube/config
     - cat ~/.kube/config
