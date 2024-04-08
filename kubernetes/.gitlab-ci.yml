@@ -12,6 +12,8 @@ deploy:
     - echo ${KUBECONFIG} > ~/.kube/config
     - export KUBECONFIG=~/.kube/config
     - cat $KUBECONFIG
+    - kubectl config current-context
+    - kubectl get no
   script:
     - kubectl apply -f kubernetes/backend/
     - kubectl apply -f kubernetes/backend-report/
