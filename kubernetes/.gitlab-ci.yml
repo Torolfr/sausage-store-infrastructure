@@ -9,7 +9,7 @@ deploy:
     url: ${K8S_URL}
   before_script:
     - mkdir ~/.kube
-    - echo ${KUBECONFIG} | base64 --decode > ~/.kube/config
+    - echo ${KUBECONFIG} | base64 -d > ~/.kube/config
     - export KUBECONFIG=~/.kube/config
     - cat $KUBECONFIG
     - kubectl config current-context
