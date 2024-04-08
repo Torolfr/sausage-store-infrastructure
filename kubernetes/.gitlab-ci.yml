@@ -3,7 +3,7 @@ stages:
 
 deploy:
   stage: deploy
-  image: alpine/k8s:1.22.6
+  image: alpine/k8s:1.26.12
   environment:
     name: kubernetes
     url: ${K8S_URL}
