@@ -12,6 +12,8 @@ deploy:
     - echo ${KUBECONFIG} > ~/.kube/config
     - export KUBECONFIG=~/.kube/config
   script:
+    - pwd
+    - echo KUBECONFIG
     - kubectl apply -f kubernetes/backend/
     - kubectl apply -f kubernetes/backend-report/
     - kubectl apply -f kubernetes/frontend/
