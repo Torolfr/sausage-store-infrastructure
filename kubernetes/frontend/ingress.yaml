@@ -7,9 +7,9 @@ spec:
   ingressClassName: "nginx"
   tls:
     - hosts:
-        - "${K8S_HOST}"
+        - sergey-danilov-24.k8s.praktikum-services.tech
   rules:
-    - host: "${K8S_HOST}"
+    - host: sergey-danilov-24.k8s.praktikum-services.tech
       http:
         paths:
           - path: /
