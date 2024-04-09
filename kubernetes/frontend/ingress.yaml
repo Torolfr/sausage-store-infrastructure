@@ -6,11 +6,10 @@ metadata:
 spec:
   ingressClassName: "nginx"
   tls:
-    - secretName: ingress-example-tls
-      hosts:
-        - ${K8S_HOST}
+    - hosts:
+        - "${K8S_HOST}"
   rules:
-    - host: ${K8S_HOST}
+    - host: "${K8S_HOST}"
       http:
         paths:
           - path: /
@@ -19,4 +18,4 @@ spec:
               service:
                 name: frontend
                 port:
-                  number: 8080
+                  number: 80
