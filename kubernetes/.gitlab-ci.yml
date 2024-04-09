@@ -16,7 +16,7 @@ deploy:
     # - envsubst | kubectl apply -f kubernetes/backend/
     # - envsubst | kubectl apply -f kubernetes/backend-report/
     # - envsubst | kubectl apply -f kubernetes/frontend/
-    - for f in *.yaml; do envsubst < $f | kubectl apply -f kubernetes/backend/; done
-    - for f in *.yaml; do envsubst < $f | kubectl apply -f kubernetes/backend-report/; done
-    - for f in *.yaml; do envsubst < $f | kubectl apply -f kubernetes/frontend/; done
+    - for file in kubernetes/backend/*.yaml; do envsubst < $file | kubectl apply -f -; done
+    - for file in kubernetes/backend-report/*.yaml; do envsubst < $file | kubectl apply -f -; done
+    - for file in kubernetes/frontend/*.yaml; do envsubst < $file | kubectl apply -f -; done
     - rm -f ~/.kube/config
