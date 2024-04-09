@@ -13,7 +13,10 @@ deploy:
     - export KUBECONFIG=~/.kube/config
   script:
     - printenv
-    - envsubst | kubectl apply -f kubernetes/backend/
-    - envsubst | kubectl apply -f kubernetes/backend-report/
-    - envsubst | kubectl apply -f kubernetes/frontend/
+    # - envsubst | kubectl apply -f kubernetes/backend/
+    # - envsubst | kubectl apply -f kubernetes/backend-report/
+    # - envsubst | kubectl apply -f kubernetes/frontend/
+    - for f in *.yaml; do envsubst < $f | kubectl apply -f kubernetes/backend/; done
+    - for f in *.yaml; do envsubst < $f | kubectl apply -f kubernetes/backend-report/; done
+    - for f in *.yaml; do envsubst < $f | kubectl apply -f kubernetes/frontend/; done
     - rm -f ~/.kube/config
