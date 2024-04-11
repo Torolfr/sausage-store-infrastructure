@@ -6,16 +6,16 @@ metadata:
 spec:
   ingressClassName: "nginx"
   tls:
-  - hosts:
-    - "sergey-danilov-24.k8s.praktikum-services.tech"
+    - hosts:
+        - "sergey-danilov-24.k8s.praktikum-services.tech"
   rules:
-  - host: "sergey-danilov-24.k8s.praktikum-services.tech"
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend
-            port: 
-              number: 80
+    - host: "sergey-danilov-24.k8s.praktikum-services.tech"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
