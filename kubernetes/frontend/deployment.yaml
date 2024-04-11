@@ -1,3 +1,4 @@
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -6,10 +7,10 @@ metadata:
   labels:
     app: frontend
 spec:
-  replicas: 1
   revisionHistoryLimit: 15
+  replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
   selector:
     matchLabels:
       app: frontend
@@ -18,28 +19,57 @@ spec:
       labels:
         app: frontend
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            preference:
+              matchExpressions:
+              - key: application
+                operator: In
+                values:
+                - front
       containers:
         - name: frontend
           image: gitlab.praktikum-services.ru:5050/std-024-29/sausage-store/sausage-frontend:latest
           imagePullPolicy: Always
+          volumeMounts:
+            - name: front-nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
           ports:
             - name: frontend
-              containerPort: 80
-          volumeMounts:
-          - name: nginx-conf
-            mountPath: /etc/nginx/conf.d/
+              containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 15
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 15
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
       volumes:
-      - name: nginx-conf
-        configMap:
-          name: nginx-conf
+        - name: front-nginx-conf
+          configMap:
+            name: front-nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
       imagePullSecrets:
         - name: docker-config-secret
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - frontend
