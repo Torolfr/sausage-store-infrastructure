@@ -7,7 +7,7 @@ metadata:
     app: backend
 spec:
   revisionHistoryLimit: 15
-  replicas: 5
+  replicas: 3
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -24,7 +24,7 @@ spec:
       containers:
         - image: gitlab.praktikum-services.ru:5050/std-024-29/sausage-store/sausage-backend:latest
           name: backend
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: SPRING_DATASOURCE_USERNAME
               value: ${SPRING_DATASOURCE_USERNAME}
