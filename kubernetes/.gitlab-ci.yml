@@ -14,5 +14,5 @@ deploy:
   script:
     - for file in kubernetes/backend/*.yaml; do envsubst < $file | kubectl apply -f -; done
     - for file in kubernetes/backend-report/*.yaml; do envsubst < $file | kubectl apply -f -; done
-    - for file in kubernetes/frontend/*.yaml; do envsubst < $file | kubectl apply -f -; done
+    - kubectl apply -f kubernetes/frontend/
     - rm -f ~/.kube/config
