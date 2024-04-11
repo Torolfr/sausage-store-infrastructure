@@ -12,10 +12,6 @@ deploy:
     - echo ${KUBECONFIG} | base64 -d > ~/.kube/config
     - export KUBECONFIG=~/.kube/config
   script:
-    - printenv
-    # - envsubst | kubectl apply -f kubernetes/backend/
-    # - envsubst | kubectl apply -f kubernetes/backend-report/
-    # - envsubst | kubectl apply -f kubernetes/frontend/
     - for file in kubernetes/backend/*.yaml; do envsubst < $file | kubectl apply -f -; done
     - for file in kubernetes/backend-report/*.yaml; do envsubst < $file | kubectl apply -f -; done
     - for file in kubernetes/frontend/*.yaml; do envsubst < $file | kubectl apply -f -; done
