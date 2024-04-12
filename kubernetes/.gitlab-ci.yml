@@ -1,0 +1,18 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  image: alpine/k8s:1.26.12
+  environment:
+    name: kubernetes
+    url: https://sergey-danilov-24.k8s.praktikum-services.tech/
+  before_script:
+    - mkdir ~/.kube
+    - echo ${KUBECONFIG} | base64 -d > ~/.kube/config
+    - export KUBECONFIG=~/.kube/config
+  script:
+    - for file in kubernetes/backend/*.yaml; do envsubst < $file | kubectl apply -f -; done
+    - for file in kubernetes/backend-report/*.yaml; do envsubst < $file | kubectl apply -f -; done
+    - kubectl apply -f kubernetes/frontend/
+    - rm -f ~/.kube/config

@@ -1,0 +1,12 @@
+stages:
+  - triggers
+
+trigger_backend:
+  stage: triggers
+  trigger:
+    include:
+      - "/kubernetes/.gitlab-ci.yml"
+    strategy: depend
+  only:
+    changes:
+      - kubernetes/**/*

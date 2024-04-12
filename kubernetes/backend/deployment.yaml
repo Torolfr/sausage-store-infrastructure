@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  revisionHistoryLimit: 15
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 80%
+      maxSurge: 20%
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - image: gitlab.praktikum-services.ru:5050/std-024-29/sausage-store/sausage-backend:latest
+          name: backend
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              value: ${SPRING_DATASOURCE_USERNAME}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: ${SPRING_DATASOURCE_PASSWORD}
+            - name: SPRING_DATASOURCE_URL
+              value: ${SPRING_DATASOURCE_URL}
+            - name: SPRING_DATA_MONGODB_URI
+              value: ${SPRING_DATA_MONGODB_URI}
+            - name: REPORT_PATH
+              value: /app/reports
+            - name: LOG_PATH
+              value: /app/logs
+          ports:
+            - name: backend
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 2
+            failureThreshold: 6
+      imagePullSecrets:
+        - name: docker-config-secret
