@@ -3,7 +3,8 @@ stages:
 
 deploy:
   stage: deploy
-  image: alpine/k8s:1.26.14
+  # image: alpine/k8s:1.26.14
+  image: alpine/k8s:latest
   environment:
     name: kubernetes
     url: https://sergey-danilov-24.k8s.praktikum-services.tech/
