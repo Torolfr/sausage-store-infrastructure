@@ -4,7 +4,7 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: backend-report-hpa
   labels:
-    app: backend-report-hpa
+    app: backend-report
 spec:
   minReplicas: 2
   maxReplicas: 5
