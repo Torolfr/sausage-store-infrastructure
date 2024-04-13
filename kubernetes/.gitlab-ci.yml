@@ -8,9 +8,9 @@ deploy:
     name: kubernetes
     url: https://sergey-danilov-24.k8s.praktikum-services.tech/
   before_script:
-    - curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-    - cp kubectl /usr/local/bin/
-    - chmod +x /usr/local/bin/kubectl
+    # - curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+    # - cp kubectl /usr/local/bin/
+    # - chmod +x /usr/local/bin/kubectl
     - mkdir ~/.kube
     - echo ${KUBECONFIG} | base64 -d > ~/.kube/config
     - export KUBECONFIG=~/.kube/config
