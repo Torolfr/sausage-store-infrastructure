@@ -6,7 +6,7 @@ metadata:
   labels:
     app: backend-report
 spec:
-  revisionHistoryLimit: 15
+  revisionHistoryLimit: 12
   replicas: 1
   selector:
     matchLabels:
@@ -20,6 +20,13 @@ spec:
         - name: backend-report
           image: gitlab.praktikum-services.ru:5050/std-024-29/sausage-store/sausage-backend-report:latest
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
           env:
             - name: DB
               value: ${REPORTS_MONGODB_URI}
@@ -28,3 +35,13 @@ spec:
               containerPort: 8080
       imagePullSecrets:
         - name: docker-config-secret
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 80
+              preference:
+                matchExpressions:
+                  - key: application
+                    operator: In
+                    values:
+                      - backend-report
