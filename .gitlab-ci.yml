@@ -1,12 +1,26 @@
 stages:
   - triggers
 
-trigger_backend:
+trigger_kubernetes:
   stage: triggers
   trigger:
     include:
       - "/kubernetes/.gitlab-ci.yml"
     strategy: depend
+  when: manual
   only:
     changes:
       - kubernetes/**/*
+
+trigger_helm-chart:
+  stage: triggers
+  trigger:
+    include:
+      - "/sausage-store-chart/.gitlab-ci.yml"
+    strategy: depend
+  when: manual
+  only:
+    changes:
+      - sausage-store-chart/**/*
+
+

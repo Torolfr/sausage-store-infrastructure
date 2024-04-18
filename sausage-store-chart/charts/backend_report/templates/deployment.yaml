@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-report
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: backend-report
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app.kubernetes.io/component: backend-report
+    app.kubernetes.io/part-of: sausage-store
+    env: "{{ .Values.global.environment }}"
+spec:
+  revisionHistoryLimit: {{ .Values.global.revisionHistoryLimit }}
+  replicas: {{ .Values.global.backend_report.replicas }}
+  selector:
+    matchLabels:
+      app: backend-report
+  template:
+    metadata:
+      labels:
+        app: backend-report
+    spec:
+      containers:
+        - name: backend-report
+          image: "{{ .Values.global.backend_report.image }}:{{ .Values.global.backend_report.tag }}"
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: {{ .Values.global.backend_report.requests_memory }}
+              cpu: {{ .Values.global.backend_report.requests_cpu }}
+            limits:
+              memory: {{ .Values.global.backend_report.limits_memory }}
+              cpu: {{ .Values.global.backend_report.limits_cpu }}
+          env:
+            - name: DB
+              value: {{ .Values.global.backend_report.db }}
+          ports:
+            - name: backend-report
+              containerPort: 8080
+      imagePullSecrets:
+        - name: docker-config-secret
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 80
+              preference:
+                matchExpressions:
+                  - key: application
+                    operator: In
+                    values:
+                      - backend-report
