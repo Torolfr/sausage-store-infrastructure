@@ -18,7 +18,6 @@ trigger_helm-chart:
     include:
       - "/sausage-store-chart/.gitlab-ci.yml"
     strategy: depend
-  when: manual
   only:
     changes:
       - sausage-store-chart/**/*

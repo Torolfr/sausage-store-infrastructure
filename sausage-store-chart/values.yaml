@@ -27,7 +27,7 @@ global:
   backend_report:
     image: gitlab.praktikum-services.ru:5050/std-024-29/sausage-store/sausage-backend-report
     tag: latest
-    replicas: 1
+    replicas: 2
     db: ${REPORTS_MONGODB_URI}
     requests_memory: 64Mi
     requests_cpu: 100m
