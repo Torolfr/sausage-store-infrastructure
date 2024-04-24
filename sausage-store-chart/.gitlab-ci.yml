@@ -16,7 +16,6 @@ release-helm-chart:
 deploy-helm-chart:
   stage: deploy
   image: alpine/helm:3.14.4
-  when: manual
   before_script:
     - mkdir ~/.kube
     - echo ${KUBECONFIG} | base64 -d > ~/.kube/config
@@ -29,5 +28,6 @@ deploy-helm-chart:
 deploy-argocd:
   stage: deploy
   image: argoproj/argocd:v2.6.15
+  when: manual 
   script:
     - argocd --grpc-web --auth-token ${ARGO_TOKEN} --server ${ARGO_SERVER} app sync sausage-store-std-024-29-git

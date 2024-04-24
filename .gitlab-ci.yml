@@ -21,5 +21,3 @@ trigger_helm-chart:
   only:
     changes:
       - sausage-store-chart/**/*
-
-
