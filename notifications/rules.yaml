@@ -1,0 +1,46 @@
+---
+groups:
+  - name: Sausage store rules
+    rules:
+    - alert: InstanceDown
+      expr: up{app="backend"} == 0
+      for: 1m
+      labels:
+        severity: critical
+        project: "sausage_store"
+        component: "Backend"
+      annotations:
+        description: '{{ $labels.instance }}  has been down for more than 1 minute.'
+        summary: 'Instance {{ $labels.instance }} with pod name {{ $labels.kubernetes_pod_name}} down'
+    
+    - alert: HTTP status code is 500
+      expr: http_server_requests_seconds_count{status="500"}
+      labels:
+        severity: critical
+        project: "sausage_store"
+        component: "Backend"
+      annotations:
+        description: '{{ $labels.uri }} send code 500'
+        instancename: "{{ $labels.instance }}"
+        summary: "Error 500"
+    
+    - alert: HighLatency
+      expr: histogram_quantile(0.95, http_server_requests_seconds_bucket{uri="/api/orders", status=~"2.."}) > 0.1
+      for: 5m
+      labels:
+        severity: critical
+        project: "sausage_store"
+        component: "Backend"
+      annotations:
+        description: '95 quantile of requests to /api/orders for 5 minutes longer than 100ms'
+        summary: Delay to /api/orders requests
+    - alert: ActuatorPrometheus
+      expr: http_server_requests_seconds_bucket{uri="/actuator/prometheus", status=~"[4,5].."}
+      for: 2m
+      labels:
+        severity: critical
+        project: "sausage_store"
+        component: "Backend"
+      annotations:
+        description: "Error in requests to /actuator/prometheus for 2 minutes"
+        summary: "Error in requests to /actuator/prometheus"
